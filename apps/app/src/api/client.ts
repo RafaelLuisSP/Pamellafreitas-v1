@@ -88,7 +88,7 @@ export const api = {
   baseUrl: API_URL,
 
   // Magic link: solicitar o e-mail de acesso (sem senha).
-  async requestMagicLink(input: { email: string; consent: boolean }) {
+  async requestMagicLink(input: { email: string; consent: boolean; turnstileToken?: string }) {
     return request<{ ok: boolean; message: string }>('/auth/magic/request', {
       method: 'POST',
       body: JSON.stringify(input),

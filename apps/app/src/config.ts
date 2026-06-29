@@ -12,6 +12,8 @@ export const site = {
   // Link de agendamento (Calendly/Cal.com). Liberado para a familia APOS o envio
   // da anamnese — e o passo final do fluxo dos pais.
   agendamentoUrl: '', // TODO: URL de agendamento on-line
+  // Cloudflare Turnstile (protecao anti-bot no acesso dos pais). Chave do site (publica).
+  turnstileSiteKey: '0x4AAAAAADs_aY1NpkaoehvI',
 } as const;
 
 // Monta um link de WhatsApp (wa.me) com mensagem opcional. Retorna null se nao configurado.

@@ -4,6 +4,7 @@ export interface Env {
   DB: D1Database;
   KV: KVNamespace;
   JWT_SECRET: string;
+  TURNSTILE_SECRET?: string; // Turnstile (anti-bot): validacao server-side do /auth/magic/request
   ALLOWED_ORIGIN?: string;
   CONSENT_VERSION?: string;
   // Magic link (login sem senha) + e-mail transacional (Resend)

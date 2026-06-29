@@ -1,12 +1,13 @@
 // Tela de acesso por MAGIC LINK (sem senha). O responsavel informa o e-mail,
 // concorda com a LGPD e recebe um link de acesso. (Arquivo historico: LoginScreen.tsx.)
 import React, { useState } from 'react';
-import { View, Pressable, Text } from 'react-native';
+import { View, Pressable, Text, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Screen, Logo, Heading, Body, Field, Button, ErrorNote } from '../components/ui';
 import { colors, spacing, radius, fonts } from '../theme/tokens';
 import { useAuth } from '../auth/AuthContext';
 import { ApiError } from '../api/client';
+import { Turnstile } from '../components/Turnstile';
 
 export function AccessScreen() {
   const { requestMagicLink } = useAuth();
@@ -15,6 +16,7 @@ export function AccessScreen() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState('');
 
   async function onSubmit() {
     setError('');
@@ -26,9 +28,13 @@ export function AccessScreen() {
       setError('Para continuar, é preciso concordar com o uso dos dados (LGPD).');
       return;
     }
+    if (Platform.OS === 'web' && !token) {
+      setError('Conclua a verificação de segurança abaixo para continuar.');
+      return;
+    }
     setLoading(true);
     try {
-      await requestMagicLink(email.trim(), consent);
+      await requestMagicLink(email.trim(), consent, token);
       setSent(true);
     } catch (e) {
       setError(e instanceof ApiError ? e.message : 'Vamos tentar de novo, com calma.');
@@ -105,6 +111,8 @@ export function AccessScreen() {
             sei que posso solicitar a exclusão a qualquer momento (LGPD).
           </Text>
         </Pressable>
+
+        <Turnstile onToken={setToken} />
 
         <Button title="Receber link de acesso" onPress={onSubmit} loading={loading} />
       </Screen>

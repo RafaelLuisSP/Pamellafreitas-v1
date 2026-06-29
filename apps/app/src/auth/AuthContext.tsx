@@ -8,7 +8,7 @@ interface AuthState {
   loading: boolean;
   verifying: boolean; // true enquanto valida um magic link vindo da URL
   needsName: boolean; // 1o acesso ainda sem nome do responsavel
-  requestMagicLink: (email: string, consent: boolean) => Promise<void>;
+  requestMagicLink: (email: string, consent: boolean, turnstileToken?: string) => Promise<void>;
   updateName: (name: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshMe: () => Promise<void>;
@@ -82,8 +82,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loading,
       verifying,
       needsName: !!guardian && guardian.name.trim() === '',
-      requestMagicLink: async (email, consent) => {
-        await api.requestMagicLink({ email, consent });
+      requestMagicLink: async (email, consent, turnstileToken) => {
+        await api.requestMagicLink({ email, consent, turnstileToken });
       },
       updateName: async (name) => {
         const { guardian: g } = await api.updateProfile(name);

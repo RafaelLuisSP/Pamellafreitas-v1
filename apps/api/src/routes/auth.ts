@@ -10,6 +10,24 @@ import { magicRequestSchema, magicVerifySchema, refreshSchema } from '../validat
 import { createMagicToken, consumeMagicToken } from '../lib/magic';
 import { sendEmail, magicLinkEmail } from '../lib/email';
 
+// Verifica o token do Cloudflare Turnstile (anti-bot / forca-bruta) no servidor.
+// Sem TURNSTILE_SECRET configurado (ex.: dev local), nao bloqueia.
+async function verifyTurnstile(secret: string | undefined, token: string | undefined, ip: string | null): Promise<boolean> {
+  if (!secret) return true;
+  if (!token) return false;
+  const form = new URLSearchParams();
+  form.append('secret', secret);
+  form.append('response', token);
+  if (ip) form.append('remoteip', ip);
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form });
+    const data = (await res.json()) as { success?: boolean };
+    return data.success === true;
+  } catch {
+    return false;
+  }
+}
+
 export const authRoutes = new Hono<AppEnv>();
 
 function publicGuardian(g: { id: string; name: string; email: string; createdAt: number; updatedAt: number }) {
@@ -20,6 +38,14 @@ function publicGuardian(g: { id: string; name: string; email: string; createdAt:
 //    Resposta neutra: nao revela se o e-mail ja possui conta.
 authRoutes.post('/magic/request', async (c) => {
   const body = magicRequestSchema.parse(await c.req.json());
+
+  // Protecao anti-bot/forca-bruta: valida o Turnstile antes de qualquer envio de e-mail.
+  const ip = c.req.header('CF-Connecting-IP') ?? null;
+  const human = await verifyTurnstile(c.env.TURNSTILE_SECRET, body.turnstileToken, ip);
+  if (!human) {
+    throw badRequest('Não foi possível confirmar a verificação de segurança. Atualize a página e tente novamente.');
+  }
+
   const email = body.email.toLowerCase();
 
   const token = await createMagicToken(c.env, email);

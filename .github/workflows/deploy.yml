@@ -50,9 +50,11 @@ jobs:
           secrets: |
             JWT_SECRET
             RESEND_API_KEY
+            TURNSTILE_SECRET
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          TURNSTILE_SECRET: ${{ secrets.TURNSTILE_SECRET }}
 
   deploy-web:
     name: Deploy Web (Pages)

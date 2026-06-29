@@ -4,6 +4,7 @@ import { z } from 'zod';
 export const magicRequestSchema = z.object({
   email: z.string().trim().email('E-mail invalido').max(200),
   consent: z.literal(true, { errorMap: () => ({ message: 'O consentimento LGPD e obrigatorio' }) }),
+  turnstileToken: z.string().max(2048).optional(),
 });
 
 // Magic link: verificar o token recebido por e-mail.
