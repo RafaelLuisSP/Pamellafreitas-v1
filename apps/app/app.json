@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Pâmella Freitas",
+    "slug": "pamella-freitas",
+    "scheme": "pamellafreitas",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "backgroundColor": "#F5EFE4",
+    "splash": {
+      "backgroundColor": "#F5EFE4",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F5EFE4"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "apiUrl": "https://api.pamellafreitas.com"
+    }
+  }
+}

@@ -1,0 +1,3 @@
+# SPA fallback (Cloudflare Pages): qualquer rota cai no index.html,
+# para o magic link /entrar?token=... abrir o app e validar o acesso.
+/*    /index.html   200

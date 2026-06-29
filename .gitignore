@@ -1,0 +1,21 @@
+# deps
+node_modules/
+# builds
+dist/
+build/
+web-build/
+.expo/
+.expo-shared/
+# cloudflare
+.wrangler/
+.dev.vars
+# env / secrets
+.env
+.env.*
+*.local
+# logs
+*.log
+npm-debug.log*
+# os
+.DS_Store
+Thumbs.db

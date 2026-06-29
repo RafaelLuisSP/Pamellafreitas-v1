@@ -1,0 +1,2 @@
+# Copie para .dev.vars (ignorado pelo git) para rodar `wrangler dev` localmente.
+JWT_SECRET="troque-por-um-segredo-longo-e-aleatorio-em-producao"

@@ -1,0 +1,24 @@
+{
+  "name": "pamella-freitas",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Ecossistema digital de apoio a Pamella Freitas - Psicologia Infantil (anamnese online, painel de atendimentos, design system da marca)",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "api:dev": "npm --workspace @pf/api run dev",
+    "api:deploy": "npm --workspace @pf/api run deploy",
+    "api:migrate": "npm --workspace @pf/api run migrate:remote",
+    "app:web": "npm --workspace @pf/app run web",
+    "app:start": "npm --workspace @pf/app run start",
+    "typecheck": "npm --workspaces --if-present run typecheck"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@types/react": "^18.3.12"
+  }
+}

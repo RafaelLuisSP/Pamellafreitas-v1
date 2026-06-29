@@ -1,0 +1,79 @@
+name: Deploy (API + Web)
+
+# Publica automaticamente a cada push na main:
+#   - apps/api  -> Cloudflare Worker  (api.pamellafreitas.com)
+#   - apps/app  -> Cloudflare Pages   (pamellafreitas.com) via Expo Web export
+#
+# Secrets necessarios no repositorio (Settings > Secrets and variables > Actions):
+#   CLOUDFLARE_API_TOKEN   - token com permissoes Workers Scripts:Edit, Pages:Edit, D1:Edit, Account Settings:Read
+#   CLOUDFLARE_ACCOUNT_ID  - id da conta Cloudflare
+#   JWT_SECRET             - segredo forte do JWT (sincronizado no Worker a cada deploy)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run typecheck
+
+  deploy-api:
+    name: Deploy API (Worker)
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - name: Deploy Worker + sync JWT_SECRET
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/api
+          command: deploy
+          secrets: |
+            JWT_SECRET
+            RESEND_API_KEY
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+
+  deploy-web:
+    name: Deploy Web (Pages)
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - name: Export Expo Web
+        working-directory: apps/app
+        run: npx expo export --platform web
+        env:
+          EXPO_PUBLIC_API_URL: https://api.pamellafreitas.com
+      - name: Deploy to Cloudflare Pages
+        working-directory: apps/app
+        run: |
+          npx wrangler pages project create pamella-freitas-web --production-branch=main || true
+          npx wrangler pages deploy dist --project-name=pamella-freitas-web --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

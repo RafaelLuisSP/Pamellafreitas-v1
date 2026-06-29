@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["@cloudflare/workers-types"],
+    "baseUrl": ".",
+    "paths": { "@pf/shared": ["../../packages/shared/src/index.ts"] },
+    "noEmit": true
+  },
+  "include": ["src", "../../packages/shared/src"]
+}

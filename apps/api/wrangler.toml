@@ -1,0 +1,31 @@
+name = "pamella-freitas-api"
+main = "src/index.ts"
+compatibility_date = "2024-12-05"
+compatibility_flags = ["nodejs_compat"]
+
+# Custom domain da API. Descomente APOS a zona pamellafreitas.com estar ativa na
+# Cloudflare. O 1o deploy pode ir para *.workers.dev; com a zona ativa, este route
+# publica o Worker em https://api.pamellafreitas.com automaticamente.
+# routes = [{ pattern = "api.pamellafreitas.com", custom_domain = true }]
+
+# Banco D1 (provisionado via MCP em 2026-06-28; migration 0000_init ja aplicada no remoto)
+[[d1_databases]]
+binding = "DB"
+database_name = "pamella-freitas"
+database_id = "0cec288f-bc92-432c-a187-b1b9a325d8aa"
+migrations_dir = "drizzle"
+
+# KV (sessoes / blocklist de tokens / rate-limit futuro)
+[[kv_namespaces]]
+binding = "KV"
+id = "f280d703cfd849db9da8de88588f467b"
+
+[vars]
+# Producao: origem do app web (apex do dominio, no Cloudflare Pages).
+ALLOWED_ORIGIN = "https://pamellafreitas.com"
+CONSENT_VERSION = "v1"
+APP_URL = "https://pamellafreitas.com"
+EMAIL_FROM = "Pâmella Freitas <acesso@pamellafreitas.com>"
+# Segredos (NUNCA versionar) — defina via `wrangler secret put` ou secrets do CI:
+#   JWT_SECRET      (assinatura dos tokens de sessao)
+#   RESEND_API_KEY  (envio do e-mail de magic link via Resend)
