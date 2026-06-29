@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 # Custom domain da API. Descomente APOS a zona pamellafreitas.com estar ativa na
 # Cloudflare. O 1o deploy pode ir para *.workers.dev; com a zona ativa, este route
 # publica o Worker em https://api.pamellafreitas.com automaticamente.
-# routes = [{ pattern = "api.pamellafreitas.com", custom_domain = true }]
+routes = [{ pattern = "api.pamellafreitas.com", custom_domain = true }]
 
 # Banco D1 (provisionado via MCP em 2026-06-28; migration 0000_init ja aplicada no remoto)
 [[d1_databases]]
