@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../auth/AuthContext';
 import { colors, fonts } from '../theme/tokens';
 import type { AppStackParamList } from './types';
-import { AccessScreen } from '../screens/LoginScreen';
+import { PublicNavigator } from './PublicNavigator';
 import { OnboardingScreen } from '../screens/RegisterScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { ChildFormScreen } from '../screens/ChildFormScreen';
@@ -66,7 +66,7 @@ export function RootNavigator() {
   if (loading || verifying) {
     return <Splash label={verifying ? 'Validando seu acesso…' : undefined} />;
   }
-  if (!guardian) return <AccessScreen />;
+  if (!guardian) return <PublicNavigator />;
   if (needsName) return <OnboardingScreen />;
 
   return (

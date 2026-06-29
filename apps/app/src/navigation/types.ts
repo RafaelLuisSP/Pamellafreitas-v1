@@ -13,3 +13,17 @@ export type AppStackParamList = {
 };
 
 export type AppScreenProps<T extends keyof AppStackParamList> = NativeStackScreenProps<AppStackParamList, T>;
+
+// Site institucional publico (visitante deslogado). A "Area dos Pais" (Entrar)
+// abre o fluxo de magic link; o resto sao paginas institucionais.
+export type PublicStackParamList = {
+  Inicio: undefined;
+  Sobre: undefined;
+  ComoTrabalho: undefined;
+  ParaOsPais: undefined;
+  Contato: undefined;
+  Privacidade: undefined;
+  Entrar: undefined;
+};
+
+export type PublicScreenProps<T extends keyof PublicStackParamList> = NativeStackScreenProps<PublicStackParamList, T>;

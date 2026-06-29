@@ -1,6 +1,7 @@
 import React, { type ReactNode } from 'react';
 import {
   View,
+  Image,
   Text,
   TextInput,
   Pressable,
@@ -63,13 +64,32 @@ export function Divider() {
   return <View style={{ height: 1, backgroundColor: colors.areia, marginVertical: spacing.md }} />;
 }
 
-export function Logo({ compact }: { compact?: boolean }) {
+// Logo oficial: simbolo da arvore (Manual da Marca) + assinatura tipografica.
+const LOGO_COLOR = require('../../assets/logo-arvore.png');
+const LOGO_LIGHT = require('../../assets/logo-arvore-claro.png');
+
+export function Logo({ compact, light, markOnly }: { compact?: boolean; light?: boolean; markOnly?: boolean }) {
+  const h = compact ? 32 : 48;
+  const nameColor = light ? colors.linho : colors.musgo;
+  const subColor = light ? colors.broto : colors.folha;
   return (
-    <View style={{ alignItems: 'flex-start' }}>
-      <Text style={{ fontFamily: fonts.display, fontSize: compact ? 22 : 30, color: colors.musgo }}>
-        Pâmella Freitas <Text style={{ color: colors.folha }}>🌱</Text>
-      </Text>
-      {!compact && <Label>Psicologia Infantil</Label>}
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <Image
+        source={light ? LOGO_LIGHT : LOGO_COLOR}
+        style={{ width: Math.round(h * 0.86), height: h, resizeMode: 'contain', marginRight: spacing.sm }}
+      />
+      {!markOnly && (
+        <View style={{ alignItems: 'flex-start' }}>
+          <Text style={{ fontFamily: fonts.display, fontSize: compact ? 19 : 26, lineHeight: compact ? 23 : 30, color: nameColor }}>
+            Pâmella Freitas
+          </Text>
+          {!compact && (
+            <Text style={{ fontFamily: fonts.bodySemibold, fontSize: 10.5, letterSpacing: 1.6, textTransform: 'uppercase', color: subColor }}>
+              Psicologia Infantil
+            </Text>
+          )}
+        </View>
+      )}
     </View>
   );
 }

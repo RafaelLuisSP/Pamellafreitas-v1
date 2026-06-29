@@ -6,6 +6,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
     "platforms": [
       "ios",
       "android",
@@ -13,6 +14,7 @@
     ],
     "backgroundColor": "#F5EFE4",
     "splash": {
+      "image": "./assets/splash.png",
       "backgroundColor": "#F5EFE4",
       "resizeMode": "contain"
     },
@@ -21,11 +23,13 @@
     },
     "android": {
       "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F5EFE4"
       }
     },
     "web": {
-      "bundler": "metro"
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
     },
     "extra": {
       "apiUrl": "https://api.pamellafreitas.com"
